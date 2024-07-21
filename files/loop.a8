@@ -1,0 +1,4 @@
+macro main
+    jump:
+    jump
+end

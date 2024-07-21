@@ -15,6 +15,9 @@ struct Args {
     /// Path of the file to open
     #[arg(short, long)]
     file: String,
+
+    #[arg(short, long)]
+    output: String,
 }
 
 fn lire_mots_fichier(path: &str) -> std::io::Result<Vec<String>> {
@@ -41,4 +44,13 @@ fn main() {
     let tokens = compiler::lexer::lex(file);
 
     println!("{:?}", tokens);
+
+    let code = compiler::generator::generate(tokens);
+
+    println!("{:?}", code);
+
+    let mut file = File::create(args.output.as_str()).unwrap();
+
+    // Step 3: Write the binary data to the file
+    file.write_all(&code).unwrap();
 }

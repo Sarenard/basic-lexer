@@ -3,8 +3,13 @@ macro clear CLEAR clear2 end
 macro clear2 CLEAR CLEAR end
 
 macro main
+    jump2:
+    jump3:
+    jump4:
     clear
+    jump
     clear2
+    jump:
     clear2
     clear
 end

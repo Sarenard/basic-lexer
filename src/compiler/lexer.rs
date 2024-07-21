@@ -1,10 +1,10 @@
-use std::{any, borrow::Borrow};
-
 #[derive(Debug, PartialEq, Clone)]
 pub enum OPCODE {
     CLEAR,
     MACRO,
     END,
+    JUMPLABEL(String),
+    JUMP(String),
 
     UNKNOWN(String),
 }
@@ -17,7 +17,35 @@ pub fn lex(buffer: Vec<String>) -> Vec<OPCODE> {
     }
     // we parse the macros
     let vec = parse_macros(vec);
+    // we do jumplabel shit
+    let vec = parse_jumplabel(vec);
     vec
+}
+
+pub fn parse_jumplabel(old: Vec<OPCODE>) -> Vec<OPCODE> {
+    let mut jumplabels: Vec<String> = vec![];
+    for opcode in &old {
+        match opcode {
+            OPCODE::JUMPLABEL(name) => {
+                jumplabels.push(name.clone());
+            }
+            _ => {
+
+            }
+        }
+    }
+    let mut new_vec: Vec<OPCODE> = vec![];
+    for item in old {
+        match item {
+            OPCODE::UNKNOWN(name) if jumplabels.contains(&name.clone()) => {
+                new_vec.push(OPCODE::JUMP(name.clone()));
+            }
+            other => {
+                new_vec.push(other);
+            }
+        }
+    }
+    new_vec
 }
 
 fn parse_macros(old: Vec<OPCODE>) -> Vec<OPCODE> {
@@ -90,6 +118,10 @@ fn lex_token(text: String) -> OPCODE {
 
         "end" => {
             return OPCODE::END;
+        }
+
+        _ if text.ends_with(':') => {
+            return OPCODE::JUMPLABEL(text.trim_end_matches(':').to_string());
         }
 
         unknown => {
