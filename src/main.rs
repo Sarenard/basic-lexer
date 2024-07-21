@@ -4,7 +4,6 @@ use clap::Parser;
 use std::{
     fs::File,
     io::{prelude::*, BufReader},
-    path::Path,
 };
 
 mod compiler;
@@ -43,10 +42,12 @@ fn main() {
 
     let tokens = compiler::lexer::lex(file);
 
+    #[cfg(debug_assertions)]
     println!("{:?}", tokens);
 
     let code = compiler::generator::generate(tokens);
 
+    #[cfg(debug_assertions)]
     println!("{:?}", code);
 
     let mut file = File::create(args.output.as_str()).unwrap();

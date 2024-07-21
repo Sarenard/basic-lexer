@@ -27,6 +27,7 @@ pub fn generate(opcodes: Vec<OPCODE>) -> Vec<u8> {
         }
     }
 
+    #[cfg(debug_assertions)]
     println!("{:?}", ids);
 
     for opcode in opcodes {
