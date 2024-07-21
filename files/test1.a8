@@ -1,2 +1,10 @@
 CLEAR
-macro clear CLEAR end
+macro clear CLEAR clear2 end
+macro clear2 CLEAR CLEAR end
+
+macro main
+    clear
+    clear2
+    clear2
+    clear
+end

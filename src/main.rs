@@ -17,18 +17,26 @@ struct Args {
     file: String,
 }
 
-fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
-    let file = File::open(filename).expect("no such file");
-    let buf = BufReader::new(file);
-    buf.lines()
-        .map(|l| l.expect("Could not parse line"))
-        .collect()
+fn lire_mots_fichier(path: &str) -> std::io::Result<Vec<String>> {
+    let fichier = File::open(path)?;
+    let lecteur = BufReader::new(fichier);
+
+    let mut mots: Vec<String> = Vec::new();
+
+    for ligne in lecteur.lines() {
+        let ligne = ligne?;
+        for mot in ligne.split_whitespace() {
+            mots.push(mot.to_string());
+        }
+    }
+
+    Ok(mots)
 }
 
 fn main() {
     let args = Args::parse();
 
-    let file = lines_from_file(args.file);
+    let file = lire_mots_fichier(args.file.as_str()).unwrap();
 
     let tokens = compiler::lexer::lex(file);
 
