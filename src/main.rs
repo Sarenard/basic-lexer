@@ -35,10 +35,8 @@ fn lire_mots_fichier(path: &str) -> std::io::Result<Vec<String>> {
     Ok(mots)
 }
 
-fn main() {
-    let args = Args::parse();
-
-    let file = lire_mots_fichier(args.file.as_str()).unwrap();
+pub fn compile(path: &str) -> Vec<u8> {
+    let file = lire_mots_fichier(path).unwrap();
 
     let tokens = compiler::lexer::lex(file);
 
@@ -49,6 +47,14 @@ fn main() {
 
     #[cfg(debug_assertions)]
     println!("{:?}", code);
+
+    code
+}
+
+fn main() {
+    let args = Args::parse();
+
+    let code = compile(args.file.as_str());
 
     let mut file = File::create(args.output.as_str()).unwrap();
 
