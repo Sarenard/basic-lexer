@@ -35,29 +35,13 @@ fn lire_mots_fichier(path: &str) -> std::io::Result<Vec<String>> {
     Ok(mots)
 }
 
-pub fn compile(path: &str) -> Vec<u8> {
-    let file = lire_mots_fichier(path).unwrap();
+fn main() {
+    let args = Args::parse();
+
+    let file = lire_mots_fichier(args.file.as_str()).unwrap();
 
     let tokens = compiler::lexer::lex(file);
 
     #[cfg(debug_assertions)]
     println!("{:?}", tokens);
-
-    let code = compiler::generator::generate(tokens);
-
-    #[cfg(debug_assertions)]
-    println!("{:?}", code);
-
-    code
-}
-
-fn main() {
-    let args = Args::parse();
-
-    let code = compile(args.file.as_str());
-
-    let mut file = File::create(args.output.as_str()).unwrap();
-
-    // Step 3: Write the binary data to the file
-    file.write_all(&code).unwrap();
 }

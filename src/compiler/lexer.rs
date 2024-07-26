@@ -1,6 +1,5 @@
 #[derive(Debug, PartialEq, Clone)]
 pub enum OPCODE {
-    CLEAR,
     MACRO,
     END,
     JUMPLABEL(String),
@@ -108,10 +107,6 @@ fn replace_occurrences(original: Vec<OPCODE>, target: OPCODE, replacement: &Vec<
 
 fn lex_token(text: String) -> OPCODE {
     match text.as_str() {
-        "CLEAR" => {
-            return OPCODE::CLEAR;
-        }
-        
         "macro" => {
             return OPCODE::MACRO;
         }

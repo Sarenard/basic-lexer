@@ -1,3 +1,3 @@
-# a rust crate to compile to the chip-8 architecture
+# a basic lexer
 
 usage : `cargo run -- -f files/<file> -o output/<file>`
